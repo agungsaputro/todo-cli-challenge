@@ -1,8 +1,8 @@
-//const argv = process.argv.slice(2)
+const argv = process.argv.slice(2)
 
-//const controllerTodo = require('./controllers/todo')
+const controllerTodo = require('./controllers/todo')
 
-//const [table, command, ...args] = argv
+const [table, command, ...args] = argv
 
 const Sequelize = require('sequelize')
 
