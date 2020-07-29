@@ -1,113 +1,60 @@
-const todo = require('../models/index')
+const models = require('../models')
 
-exports.get = async (req, res) => {
-	try {
-		const dataTasks = await task.findAll();
-		res.status(200).json({
-			message: 'success retrieve data',
-			status: true,
-			data: dataTasks
-		});
-	} catch (error) {
-		res.status(500).json({
-			message: 'failed',
-			status: false,
-			data: error
-		});
-	}
-};
 
-exports.post = async (req, res) => {
-	const dataTask = req.body;
-	try {
-		await task.create(dataTask);
-		res.status(200).json({
-			message: 'success add new task',
-			status: true
-		});
-	} catch (error) {
-		res.status(500).json({
-			message: 'failed',
-			status: false,
-			data: error
-		});
-	}
-};
 
-exports.put = async (req, res) => {
-	const taskId = req.params.id;
-	const dataTask = req.body;
-
-	try {
-		const cekTask = await task.findOne({ where: { id: taskId } });
-		if (cekTask) {
-            await task.update(dataTask,{ where: { id: taskId } })
-            res.status(200).json({
-                message: 'success update task',
-                status: true
-            });
-		} else {
-            res.status(404).json({
-                message: 'task is not found',
-                status: false
-            });
-		}
-	} catch (error) {
-        res.status(500).json({
-			message: 'failed',
-			status: false,
-			data: error
-		});
+class ControllerTodo{
+    static add(name_task,done){
+        models.Todo.create({
+            name_task: name_task,
+            done: done
+        })
+            .then(data =>{
+                console.log(data)
+            })
+            .catch(err =>{
+                console.log("error")
+            })
     }
-};
-
-exports.delete = async (req, res) => {
-    const taskId = req.params.id;
-
-	try {
-		const cekTask = await task.findOne({ where: { id: taskId } });
-		if (cekTask) {
-            await task.destroy({ where: { id: taskId } })
-            res.status(200).json({
-                message: 'success Delete task',
-                status: true
-            });
-		} else {
-            res.status(404).json({
-                message: 'task is not found',
-                status: false
-            });
-		}
-	} catch (error) {
-        res.status(500).json({
-			message: 'failed',
-			status: false,
-			data: error
-		});
+    static read(){
+        models.Todo.findAll()
+        .then(dataAllTodo =>{
+            dataAllTodo.forEach(data => {
+                console.log(data)
+            })
+        })
+        .catch(err =>{
+            console.log("error")
+        })
     }
-};
-
-exports.getById = async (req, res) => {
-    const taskId = req.params.id;
-	try {
-		const dataTask = await task.findOne({ where: { id: taskId } });
-		if (dataTask) {
-            res.status(200).json({
-                message: 'success retrieve data',
-                status: true,
-                data: dataTask
-            });
-		} else {
-            res.status(404).json({
-                message: 'task is not found',
-                status: false
-            });
-		}
-	} catch (error) {
-        res.status(500).json({
-			message: 'failed',
-			status: false,
-			data: error
-		});
+    static update(id, name_task,done){
+        models.Todo.update({
+            name_task:name_task,
+            done:done
+        },{
+            where:{
+                id:id
+            }
+        })
+        .then(() =>{
+            console.log(`Data with id ${id} succes update`)
+        })
+        .catch(err =>{
+            console.log("error")
+        })
     }
-};
+    static delete(id){
+        models.Todo.destroy({
+            where:{
+                id:id
+            }
+        })
+        .then(() =>{
+            console.log(`Data with id ${id} success deleted`)
+        })
+        .catch(err => {
+            console.log("error")
+        })
+    }
+}
+
+module.exports = ControllerTodo
