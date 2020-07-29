@@ -4,26 +4,23 @@ const controllerTodo = require('./controllers/todo')
 
 const [table, command, ...args] = argv
 
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
+const todo = require('./models');
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'mysql',
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-      }
+const sequelize = new Sequelize('rf_todoapp', 'root', '', {
+    host: '127.0.0.1',
+    dialect: 'mysql'
   });
 
-  sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
+sequelize.authenticate().then(() => {
+    console.log('Connection established successfully.');
+  }).catch(err => {
     console.error('Unable to connect to the database:', err);
+  }).finally(() => {
+    sequelize.close();
   });
+
+
 
 switch(table){
     case "todo":{

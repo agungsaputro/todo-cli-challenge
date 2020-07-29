@@ -1,15 +1,28 @@
 'use strict';
-
+const{
+  Model
+} = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-    const todo = sequelize.define(
-        'todo',{
-          nama_task:DataTypes.STRING,
-          done: DataTypes.BOOLEAN
-        },
-        {}
-    );
-    todo.associate = function(models){
-        
+  class Todo extends Model{
+
+  //  const todo = sequelize.define(
+  //      'todo',{
+  //        nama_task:DataTypes.STRING,
+  //       done: DataTypes.BOOLEAN
+  //      },
+  //      {}
+  //  );
+  //  todo.associate = function(models){
+        static associate(models){
+
+        }
     };
-    return todo;
+    Todo.init({
+      name_task: DataTypes.STRING,
+      done : DataTypes.BOOLEAN
+    },{
+      sequelize,
+      rodelName: 'Todo'
+    })
+    return Todo
 };
