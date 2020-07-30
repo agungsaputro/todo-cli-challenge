@@ -1,28 +1,41 @@
 'use strict';
-const{
-  Model
-} = require('sequelize')
-module.exports = (sequelize, DataTypes) => {
-  class Todo extends Model{
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
-  //  const todo = sequelize.define(
-  //      'todo',{
-  //        nama_task:DataTypes.STRING,
-  //       done: DataTypes.BOOLEAN
-  //      },
-  //      {}
-  //  );
-  //  todo.associate = function(models){
-        static associate(models){
+const sequelize = new Sequelize('database_development', 'root', '', {
+    username: "root",
+    password: null,
+    database: "database_development",
+    host: '127.0.0.1',
+    dialect: 'mysql'
+});
 
-        }
-    };
-    Todo.init({
-      name_task: DataTypes.STRING,
-      done : DataTypes.BOOLEAN
-    },{
-      sequelize,
-      rodelName: 'Todo'
-    })
-    return Todo
-};
+(async() => {
+  try {
+      await sequelize.authenticate();
+  } catch (error) {
+      console.error('Unable to connect to the database:', error);
+  }
+
+})();
+
+class Todo extends Model{
+  };
+Todo.init({
+  task: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+  status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
+    }
+}, {
+    sequelize,
+    modelName: 'Todo'
+});
+
+(async() => {
+  await Todo.sync();
+})()
+
+module.exports = { Todo, sequelize }
