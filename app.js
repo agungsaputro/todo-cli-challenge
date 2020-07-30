@@ -8,9 +8,9 @@ const list = async() => {
         attributes: ['id', 'task', 'status']
     });
     if (todos.length > 0) {
-        todos.map((v, i) => {
-            const activity = v.dataValues.status == true ? v.dataValues.task + ' (DONE)' : v.dataValues.task;
-            console.log(`${v.dataValues.id}. ${activity}`)
+        todos.map((value) => {
+            const activity = value.dataValues.status == true ? value.dataValues.task + ' (DONE)' : value.dataValues.task;
+            console.log(`${value.dataValues.id}. ${activity}`)
         })
     } else {
         console.log('empty')
@@ -21,15 +21,15 @@ const add = async(todo) => {
     const t = await sequelize.transaction();
     try {
 
-        const result = await sequelize.transaction(async(t) => {
+        const result = await sequelize.transaction(async(todos) => {
             const list = await Todo.create({
                 task: todo
-            }, { transaction: t });
+            }, { transaction: todos });
             return list;
 
         });
 
-        await t.commit().then((val) => {
+        await todos.commit().then((val) => {
             console.log('succes added data')
         });
 
@@ -48,7 +48,7 @@ program
         console.log(list());
     })
     .command("add", "add list")
-    .argument("<text>", "text task")
+    .argument("<value>", "text task")
     .action(({ logger, args, options }) => {
         add(args.text)
     })
