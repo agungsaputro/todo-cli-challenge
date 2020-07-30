@@ -1,13 +1,14 @@
-const argv = process.argv.slice(2)
-
-const controllerTodo = require('./controllers/todo')
-
-const [table, command, ...args] = argv
 
 const Sequelize = require('sequelize');
-const todo = require('./models');
+const program = require('@caporal/core');
 
-const sequelize = new Sequelize('rf_todoapp', 'root', '', {
+
+
+
+const sequelize = new Sequelize({
+    username: "root",
+    password: null,
+    database: "database_development",
     host: '127.0.0.1',
     dialect: 'mysql'
   });
@@ -20,23 +21,4 @@ sequelize.authenticate().then(() => {
     sequelize.close();
   });
 
-
-
-switch(table){
-    case "todo":{
-        switch(command){
-            case 'add':{
-                controllerTodo.add(...args)
-                break
-            }
-            case 'read': {
-                controllerTodo.read();
-                break;
-            }
-            default:{
-                console.log('item tidak ditemukan')
-            }
-        }
-        break
-    }
-}
+  
